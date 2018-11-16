@@ -1014,6 +1014,20 @@
       "additionalProperties": {
         "type": "number"
       }
+    },
+    "Alias": {
+      "type": "integer",
+      "description": "Alias",
+      "format": "int32"
+    },
+    "UseAlias": {
+      "type": "object",
+      "required": [],
+      "properties": {
+        "alias": {
+          "$ref": "#/definitions/Alias"
+        }
+      }
     }
   }
 }
