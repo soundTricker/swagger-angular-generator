@@ -5,7 +5,7 @@
  * example.com/api-base-path
  */
 
-import {createFeatureSelector} from '@ngrx/store';
+import {Action, createReducer, on, createFeatureSelector} from '@ngrx/store';
 
 import {HttpErrorResponse, HttpResponse} from '@angular/common/http';
 import * as __model from '../../../../model';
@@ -28,18 +28,19 @@ export const initialRestAuthUserUpdateState: RestAuthUserUpdateState = {
 export const selectorName = 'RestAuth_RestAuthUserUpdate';
 export const getRestAuthUserUpdateStateSelector = createFeatureSelector<RestAuthUserUpdateState>(selectorName);
 
+const reducer = createReducer(
+  initialRestAuthUserUpdateState,
+  on(actions.start, state => ({...state, loading: true, error: null})),
+  on(actions.success, (state, payload) => ({
+    ...state,
+    data: payload.body,
+    res: payload,
+    loading: false,
+  })),
+  on(actions.error, (state, payload) => ({...state, error: payload, loading: false})),
+  );
 export function RestAuthUserUpdateReducer(
-  state: RestAuthUserUpdateState = initialRestAuthUserUpdateState,
-  action: actions.RestAuthUserUpdateAction): RestAuthUserUpdateState {
-  switch (action.type) {
-    case actions.Actions.START: return {...state, loading: true, error: null};
-    case actions.Actions.SUCCESS: return {
-      ...state,
-      data: action.payload.body,
-      res: action.payload,
-      loading: false,
-    };
-    case actions.Actions.ERROR: return {...state, error: action.payload, loading: false};
-    default: return state;
-  }
+  state: RestAuthUserUpdateState | undefined,
+  action: Action) {
+    return reducer(state, action);
 }

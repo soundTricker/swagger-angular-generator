@@ -5,7 +5,7 @@
  * example.com/api-base-path
  */
 
-import {createFeatureSelector} from '@ngrx/store';
+import {Action, createReducer, on, createFeatureSelector} from '@ngrx/store';
 
 import {HttpErrorResponse, HttpResponse} from '@angular/common/http';
 import * as __model from '../../../../model';
@@ -28,18 +28,19 @@ export const initialShowTicketDetailState: ShowTicketDetailState = {
 export const selectorName = 'Ticketing_ShowTicketDetail';
 export const getShowTicketDetailStateSelector = createFeatureSelector<ShowTicketDetailState>(selectorName);
 
+const reducer = createReducer(
+  initialShowTicketDetailState,
+  on(actions.start, state => ({...state, loading: true, error: null})),
+  on(actions.success, (state, payload) => ({
+    ...state,
+    data: payload.body,
+    res: payload,
+    loading: false,
+  })),
+  on(actions.error, (state, payload) => ({...state, error: payload, loading: false})),
+  );
 export function ShowTicketDetailReducer(
-  state: ShowTicketDetailState = initialShowTicketDetailState,
-  action: actions.ShowTicketDetailAction): ShowTicketDetailState {
-  switch (action.type) {
-    case actions.Actions.START: return {...state, loading: true, error: null};
-    case actions.Actions.SUCCESS: return {
-      ...state,
-      data: action.payload.body,
-      res: action.payload,
-      loading: false,
-    };
-    case actions.Actions.ERROR: return {...state, error: action.payload, loading: false};
-    default: return state;
-  }
+  state: ShowTicketDetailState | undefined,
+  action: Action) {
+    return reducer(state, action);
 }

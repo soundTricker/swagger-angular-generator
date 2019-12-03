@@ -6,7 +6,7 @@
  */
 
 import {HttpErrorResponse, HttpResponse} from '@angular/common/http';
-import {Action} from '@ngrx/store';
+import {createAction, props} from '@ngrx/store';
 import {MapParams} from '../../../../controllers/Structures';
 
 export enum Actions {
@@ -15,19 +15,18 @@ export enum Actions {
   ERROR = '[Structures map] Error',
 }
 
-export class Start implements Action {
-  readonly type = Actions.START;
-  constructor(public payload: MapParams) {}
-}
+export const start = createAction(
+  Actions.START,
+  props<MapParams>(),
+);
 
-export class Success implements Action {
-  readonly type = Actions.SUCCESS;
-  constructor(public payload: HttpResponse<void>) {}
-}
+export const success = createAction(
+  Actions.SUCCESS,
+  props<HttpResponse<void>>(),
+);
 
-export class Error implements Action {
-  readonly type = Actions.ERROR;
-  constructor(public payload: HttpErrorResponse) {}
-}
+export const error = createAction(
+  Actions.ERROR,
+  props<HttpErrorResponse>(),
+);
 
-export type MapAction = Start | Success | Error;

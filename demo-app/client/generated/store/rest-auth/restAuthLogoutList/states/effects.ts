@@ -7,7 +7,7 @@
 
 import {HttpErrorResponse} from '@angular/common/http';
 import {Injectable} from '@angular/core';
-import {Actions, Effect, ofType} from '@ngrx/effects';
+import {Actions, createEffect, ofType} from '@ngrx/effects';
 
 import {of} from 'rxjs';
 
@@ -17,16 +17,15 @@ import * as actions from './actions';
 
 @Injectable()
 export class RestAuthLogoutListEffects {
-  @Effect()
-  RestAuthLogoutList = this.storeActions.pipe(
-    ofType<actions.Start>(actions.Actions.START),
-    switchMap(() => this.restauthService.restAuthLogoutListWithResponse()
+  RestAuthLogoutList = createEffect(() => this.storeActions.pipe(
+    ofType(actions.start),
+    switchMap( => this.restauthService.restAuthLogoutListWithResponse()
       .pipe(
-        map(result => new actions.Success(result)),
-        catchError((error: HttpErrorResponse) => of(new actions.Error(error))),
+        map(result => actions.success(result)),
+        catchError((error: HttpErrorResponse) => of(actions.error(error))),
       ),
     ),
-  );
+  ));
 
   constructor(
     private storeActions: Actions,

@@ -7,7 +7,7 @@
 
 import {HttpErrorResponse} from '@angular/common/http';
 import {Injectable} from '@angular/core';
-import {Actions, Effect, ofType} from '@ngrx/effects';
+import {Actions, createEffect, ofType} from '@ngrx/effects';
 
 import {of} from 'rxjs';
 
@@ -17,16 +17,15 @@ import * as actions from './actions';
 
 @Injectable()
 export class RestAuthUserPartialUpdateEffects {
-  @Effect()
-  RestAuthUserPartialUpdate = this.storeActions.pipe(
-    ofType<actions.Start>(actions.Actions.START),
-    switchMap((action: actions.Start) => this.restauthService.restAuthUserPartialUpdateWithResponse(action.payload)
+  RestAuthUserPartialUpdate = createEffect(() => this.storeActions.pipe(
+    ofType(actions.start),
+    switchMap(action => this.restauthService.restAuthUserPartialUpdateWithResponse(action)
       .pipe(
-        map(result => new actions.Success(result)),
-        catchError((error: HttpErrorResponse) => of(new actions.Error(error))),
+        map(result => actions.success(result)),
+        catchError((error: HttpErrorResponse) => of(actions.error(error))),
       ),
     ),
-  );
+  ));
 
   constructor(
     private storeActions: Actions,

@@ -11,6 +11,7 @@ export function generateHttpReducers(config: Config, name: string, actionClassNa
   content += getStateInteface(actionClassNameBase, responseType);
   content += getInitialState(actionClassNameBase);
   content += getFeatureSelector(name, actionClassNameBase);
+  content += getCreateReducerDefinition(actionClassNameBase);
   content += getReducerDefinition(actionClassNameBase);
 
   const reducersFileName = path.join(formSubDirName, stateDir, `reducers.ts`);
@@ -18,7 +19,7 @@ export function generateHttpReducers(config: Config, name: string, actionClassNa
 }
 
 function getReducerImports(usesModels: boolean) {
-  let res = `import {createFeatureSelector} from '@ngrx/store';\n\n`;
+  let res = `import {Action, createReducer, on, createFeatureSelector} from '@ngrx/store';\n\n`;
   res += `import {HttpErrorResponse, HttpResponse} from '@angular/common/http';\n`;
   if (usesModels) res += `import * as __model from '../../../../model';\n`;
   res += `import * as actions from './actions';\n\n`;
@@ -56,20 +57,23 @@ function getFeatureSelector(name: string, actionClassNameBase: string) {
   return res;
 }
 
+function getCreateReducerDefinition(actionClassNameBase: string) {
+  let res = `const reducer = createReducer(\n`;
+  res += indent(`initial${actionClassNameBase}State,\n`);
+  res += indent(`on(actions.start, state => ({...state, loading: true, error: null})),\n`);
+  res += indent(`on(actions.success, (state, payload) => ({\n`);
+  res += indent('...state,\ndata: payload.body,\nres: payload,\nloading: false,\n', 2);
+  res += indent(`})),\n`);
+  res += indent(`on(actions.error, (state, payload) => ({...state, error: payload, loading: false})),\n`);
+  res += `);\n\n`;
+  return res;
+}
+
 function getReducerDefinition(actionClassNameBase: string) {
   let res = `export function ${actionClassNameBase}Reducer(\n`;
-  res += indent(`state: ${actionClassNameBase}State = initial${actionClassNameBase}State,\n`);
-  res += indent(`action: actions.${actionClassNameBase}Action): ${actionClassNameBase}State {\n\n`);
-  res += indent(`switch (action.type) {\n`);
-  res += indent([
-    'case actions.Actions.START: return {...state, loading: true, error: null};',
-    'case actions.Actions.SUCCESS: return {\n' +
-      indent('...state,\ndata: action.payload.body,\nres: action.payload,\nloading: false,\n') +
-    '};',
-    'case actions.Actions.ERROR: return {...state, error: action.payload, loading: false};',
-    'default: return state;',
-  ], 2);
-  res += indent(`\n}\n`);
+  res += indent(`state: ${actionClassNameBase}State | undefined,\n`);
+  res += indent(`action: Action) {\n`);
+  res += indent(`return reducer(state, action);\n`, 2);
   res += `}\n`;
 
   return res;

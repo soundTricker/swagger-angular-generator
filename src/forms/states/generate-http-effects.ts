@@ -19,7 +19,7 @@ export function generateHttpEffects(config: Config, name: string, simpleName: st
 function getEffectsImports(name: string) {
   let res = `import {HttpErrorResponse} from '@angular/common/http';\n`;
   res += `import {Injectable} from '@angular/core';\n`;
-  res += `import {Actions, Effect, ofType} from '@ngrx/effects';\n`;
+  res += `import {Actions, createEffect, ofType} from '@ngrx/effects';\n`;
   res += '\n';
   res += `import {of} from 'rxjs';\n`;
   res += '\n';
@@ -50,25 +50,24 @@ function getConstructorDefinition(name: string) {
 function getEffectDefinition(actionClassNameBase: string, name: string, simpleName: string, hasParams: boolean) {
   const startActionPayloadDefinition = getStartActionPayloadDefinition(hasParams);
 
-  let res = indent(`@Effect()\n`);
-  res += indent(`${actionClassNameBase} = this.storeActions.pipe(\n`);
-  res += indent(`ofType<actions.Start>(actions.Actions.START),\n`, 2);
-  const actionParam = hasParams ? 'action: actions.Start' : '';
+  let res = indent(`${actionClassNameBase} = createEffect(() => this.storeActions.pipe(\n`);
+  res += indent(`ofType(actions.start),\n`, 2);
+  const actionParam = hasParams ? 'action' : '';
   res += indent(
-    `switchMap((${actionParam}) => ` +
+    `switchMap(${actionParam} => ` +
     `this.${name.toLowerCase()}Service.${simpleName}WithResponse(${startActionPayloadDefinition})\n`, 2);
   res += indent(`.pipe(\n`, 3);
-  res += indent(`map(result => new actions.Success(result)),\n`, 4);
-  res += indent(`catchError((error: HttpErrorResponse) => of(new actions.Error(error))),\n`, 4);
+  res += indent(`map(result => actions.success(result)),\n`, 4);
+  res += indent(`catchError((error: HttpErrorResponse) => of(actions.error(error))),\n`, 4);
   res += indent(`),\n`, 3);
   res += indent(`),\n`, 2);
-  res += indent(`);\n`);
+  res += indent(`));\n`);
   res += '\n';
 
   return res;
 }
 
 function getStartActionPayloadDefinition(hasParams: boolean) {
-  if (hasParams) return 'action.payload';
+  if (hasParams) return 'action';
   return '';
 }
