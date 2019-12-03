@@ -85,10 +85,7 @@ export class OrderService {
    */
   orderWithResponse(params: OrderParams):Observable<HttpResponse<object>> {
     const bodyParams = params.orderDto;
-    const bodyParamsWithoutUndefined: any = {};
-    Object.entries(bodyParams || {}).forEach(([key, value]: [string, any]) => {
-      if (value !== undefined) bodyParamsWithoutUndefined[key] = value;
-    });
+
     const queryParamBase = {
       producer: params.producer,
     };
@@ -97,11 +94,12 @@ export class OrderService {
     Object.entries(queryParamBase).forEach(([key, value]: [string, any]) => {
       if (value !== undefined) {
         if (typeof value === 'string') queryParams = queryParams.set(key, value);
+        else if (Array.isArray(value)) value.forEach(v => queryParams = queryParams.append(key, v));
         else queryParams = queryParams.set(key, JSON.stringify(value));
       }
     });
 
-    return this.http.post<object>(`/api-base-path/order`, bodyParamsWithoutUndefined, {params: queryParams, observe: 'response'});
+    return this.http.post<object>(`/api-base-path/order`, bodyParams || {}, {params: queryParams, observe: 'response'});
   }
 
   /**
@@ -133,11 +131,8 @@ export class OrderService {
       producer: params.producer,
       model: params.model,
     };
-    const bodyParamsWithoutUndefined: any = {};
-    Object.entries(bodyParams || {}).forEach(([key, value]: [string, any]) => {
-      if (value !== undefined) bodyParamsWithoutUndefined[key] = value;
-    });
-    return this.http.patch<object>(`/api-base-path/order/${pathParams.orderId}`, bodyParamsWithoutUndefined, {observe: 'response'});
+
+    return this.http.patch<object>(`/api-base-path/order/${pathParams.orderId}`, bodyParams || {}, {observe: 'response'});
   }
 
   /**
@@ -171,11 +166,8 @@ export class OrderService {
       model: params.model,
       customerName: params.customerName,
     };
-    const bodyParamsWithoutUndefined: any = {};
-    Object.entries(bodyParams || {}).forEach(([key, value]: [string, any]) => {
-      if (value !== undefined) bodyParamsWithoutUndefined[key] = value;
-    });
-    return this.http.put<object>(`/api-base-path/order/${pathParams.orderId}`, bodyParamsWithoutUndefined, {observe: 'response'});
+
+    return this.http.put<object>(`/api-base-path/order/${pathParams.orderId}`, bodyParams || {}, {observe: 'response'});
   }
 
   /**

@@ -60,11 +60,7 @@ export function processProperty(prop: Schema, name = '', namespace = '',
       case 'array':
         defType = translateType(prop.items && (prop.items.type || prop.items.$ref));
         const itemProp = processProperty(prop.items)[0];
-        if (defType.arraySimple) {
-          type = `${itemProp.property}[]`;
-        } else {
-          type = `Array<${itemProp.property}>`;
-        }
+        type = `${itemProp.property}[]`;
         break;
       default:
         if (prop.additionalProperties) {

@@ -55,11 +55,11 @@ export function writeToBaseModelFile(config: Config, allExports: string) {
 
 function isStringArray(value: any): value is string[] {
   if (value instanceof Array) {
-    value.forEach(item => { // maybe only check first value?
+    for (const item of value) {
       if (typeof item !== 'string') {
         return false;
       }
-    })
+    }
     return true;
   }
   return false;
@@ -96,7 +96,7 @@ export function processDefinition(def: Schema, name: string, config: Config): Pr
     // concat non-empty enum lines
     const enumLines = _.map(properties, 'enumDeclaration').filter(Boolean).join('\n\n');
     if (enumLines) output += `\n${enumLines}\n`;
-  } else if ((def.type === 'string' || def.type === 'number') && def.enum) {
+  } else if ((def.type === 'string' || def.type === 'number' || def.type === 'integer') && def.enum) {
     if (isStringArray(def.enum)) {
       output += `export type ${name} = ${def.enum.map(e => `'${e}'`).join(' | ')};\n\n`;
       output += `export const ${name} = {\n`;

@@ -5,6 +5,4 @@
  * example.com/api-base-path
  */
 
-export type EnumIntAlias =
-  1 |
-  2;
+export type EnumIntAlias = 1 | 2;
