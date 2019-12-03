@@ -81,7 +81,5 @@ export function processController(methods: ControllerMethod[], name: string, con
   writeFile(filename, content, config.header);
 
   // forms
-  if (config.generateStore) {
-    createForms(config, name, processedMethods, definitions);
-  }
+  createForms(config, name, processedMethods, definitions);
 }

@@ -45,21 +45,16 @@ function processProperty(prop, name = '', namespace = '', required = false, expo
                 type = defType.type;
                 break;
             case 'array':
-                defType = translateType(prop.items.type || prop.items.$ref);
+                defType = translateType(prop.items && (prop.items.type || prop.items.$ref));
                 const itemProp = processProperty(prop.items)[0];
-                if (defType.arraySimple) {
-                    type = `${itemProp.property}[]`;
-                }
-                else {
-                    type = `Array<${itemProp.property}>`;
-                }
+                type = `${itemProp.property}[]`;
                 break;
             default:
                 if (prop.additionalProperties) {
                     const ap = prop.additionalProperties;
                     let additionalType;
                     if (ap.type === 'array') {
-                        defType = translateType(ap.items.type || ap.items.$ref);
+                        defType = translateType(ap.items && (ap.items.type || ap.items.$ref));
                         additionalType = `${defType.type}[]`;
                     }
                     else {
@@ -153,16 +148,12 @@ exports.normalizeDef = normalizeDef;
 function translateType(type) {
     if (type in conf.nativeTypes) {
         const typeType = type;
-        return {
-            type: conf.nativeTypes[typeType],
-            native: true,
-            arraySimple: true,
-        };
+        return { type: conf.nativeTypes[typeType], native: true };
     }
     const subtype = type.match(/^#\/definitions\/(.*)/);
     if (subtype)
         return resolveDefType(subtype[1]);
-    return { type, native: true, arraySimple: true };
+    return { type, native: true };
 }
 exports.translateType = translateType;
 /**
@@ -175,18 +166,10 @@ function resolveDefType(type) {
     // does not seem to happen but the function is ready for that
     if (type in conf.nativeTypes) {
         const typedType = type;
-        return {
-            type: conf.nativeTypes[typedType],
-            native: true,
-            arraySimple: true,
-        };
+        return { type: conf.nativeTypes[typedType], native: true };
     }
     type = normalizeDef(type);
-    return {
-        type: `__${conf.modelFile}.${type}`,
-        native: false,
-        arraySimple: true,
-    };
+    return { type: `__${conf.modelFile}.${type}`, native: false };
 }
 function getAccessor(key, propName = '') {
     let res = key;

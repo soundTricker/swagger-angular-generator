@@ -8,7 +8,7 @@ import {indent, makeComment} from './utils';
 export interface PropertyOutput {
   property: string;
   propertyAsMethodParameter: string;
-  enumDeclaration: string;
+  enumDeclaration: string | undefined;
   native: boolean;
   isRequired: boolean;
 }
@@ -23,7 +23,7 @@ export function processProperty(prop: Schema, name = '', namespace = '',
                                 required: (string[] | boolean) = false,
                                 exportEnums = true): PropertyOutput[] {
   let type: string;
-  let enumDeclaration: string;
+  let enumDeclaration: string | undefined;
   let native = true;
   let isMap = false;
 
@@ -58,7 +58,7 @@ export function processProperty(prop: Schema, name = '', namespace = '',
         type = defType.type;
         break;
       case 'array':
-        defType = translateType(prop.items.type || prop.items.$ref);
+        defType = translateType(prop.items && (prop.items.type || prop.items.$ref));
         const itemProp = processProperty(prop.items)[0];
         if (defType.arraySimple) {
           type = `${itemProp.property}[]`;
@@ -71,7 +71,7 @@ export function processProperty(prop: Schema, name = '', namespace = '',
           const ap = prop.additionalProperties;
           let additionalType: string;
           if (ap.type === 'array') {
-            defType = translateType(ap.items.type || ap.items.$ref);
+            defType = translateType(ap.items && (ap.items.type || ap.items.$ref));
             additionalType = `${defType.type}[]`;
           } else {
             defType = translateType(
@@ -161,27 +161,22 @@ export function normalizeDef(type: string): string {
 interface DefType {
   type: string;
   native: boolean;
-  arraySimple: boolean;
 }
 
 /**
  * Translates schema type into native/defined type for typescript
  * @param type definition
  */
-export function translateType(type: string): DefType {
+export function translateType(type: string | undefined): DefType {
   if (type in conf.nativeTypes) {
     const typeType = type as NativeNames;
-    return {
-      type: conf.nativeTypes[typeType],
-      native: true,
-      arraySimple: true,
-    };
+    return {type: conf.nativeTypes[typeType], native: true};
   }
 
   const subtype = type.match(/^#\/definitions\/(.*)/);
   if (subtype) return resolveDefType(subtype[1]);
 
-  return {type, native: true, arraySimple: true};
+  return {type, native: true};
 }
 
 /**
@@ -194,19 +189,11 @@ function resolveDefType(type: string): DefType {
   // does not seem to happen but the function is ready for that
   if (type in conf.nativeTypes) {
     const typedType = type as NativeNames;
-    return {
-      type: conf.nativeTypes[typedType],
-      native: true,
-      arraySimple: true,
-    };
+    return {type: conf.nativeTypes[typedType], native: true};
   }
 
   type = normalizeDef(type);
-  return {
-    type: `__${conf.modelFile}.${type}`,
-    native: false,
-    arraySimple: true,
-  };
+  return {type: `__${conf.modelFile}.${type}`, native: false};
 }
 
 export function getAccessor(key: string, propName = '') {

@@ -145,9 +145,18 @@ function getParamSeparation(paramGroups: Partial<Record<ParamLocation, Parameter
     let def: string;
     const list = map(group, p => {
       // header params values need to be strings
-      const suffix = groupName === 'header' && p.type !== 'string' ?
-        '.toString()' :
-        '';
+      let suffix: string;
+      if (groupName === 'header' && p.type !== 'string') suffix = '.toString()';
+      else if (groupName === 'query' && p.type === 'array') {
+        let separator: string;
+        if (p.collectionFormat === 'ssv') separator = ' ';
+        else if (p.collectionFormat === 'tsv') separator = '\\t';
+        else if (p.collectionFormat === 'pipes') separator = '|';
+        else if (['csv', undefined].includes(p.collectionFormat)) separator = ',';
+
+        if (separator) suffix = `.join('${separator}')`;
+      } else suffix = '';
+
       return getObjectPropSetter(p.name, 'params', suffix);
     });
 
@@ -159,6 +168,8 @@ function getParamSeparation(paramGroups: Partial<Record<ParamLocation, Parameter
       def += 'Object.entries(queryParamBase).forEach(([key, value]: [string, any]) => {\n';
       def += '  if (value !== undefined) {\n';
       def += '    if (typeof value === \'string\') queryParams = queryParams.set(key, value);\n';
+      // `collectionFormat` set to multi viz. https://swagger.io/docs/specification/2-0/describing-parameters/
+      def += '    else if (Array.isArray(value)) value.forEach(v => queryParams = queryParams.append(key, v));\n';
       def += '    else queryParams = queryParams.set(key, JSON.stringify(value));\n';
       def += '  }\n';
       def += '});\n';
@@ -174,14 +185,7 @@ function getParamSeparation(paramGroups: Partial<Record<ParamLocation, Parameter
         def = '{\n' + indent(list) + '\n};';
       }
 
-      // bodyParams keys with value === undefined are removed
-      let res = `const ${groupName}Params = ${def}\n`;
-      res += 'const bodyParamsWithoutUndefined: any = {};\n';
-      res += 'Object.entries(bodyParams || {}).forEach(([key, value]: [string, any]) => {\n';
-      res += '  if (value !== undefined) bodyParamsWithoutUndefined[key] = value;\n';
-      res += '});';
-
-      return res;
+      return `const ${groupName}Params = ${def}\n`;
     }
 
     def = '{\n' + indent(list) + '\n}';
@@ -205,7 +209,7 @@ function getRequestParams(paramTypes: ParamLocation[], methodName: string, withR
 
   if (['post', 'put', 'patch'].includes(methodName)) {
     if (paramTypes.includes('body')) {
-      res += ', bodyParamsWithoutUndefined';
+      res += ', bodyParams || {}';
     } else if (paramTypes.includes('formData')) {
       res += ', formDataParams';
     } else {
