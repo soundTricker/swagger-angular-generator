@@ -42,7 +42,7 @@ function getEffectDefinition(actionClassNameBase, name, simpleName, hasParams) {
     const startActionPayloadDefinition = getStartActionPayloadDefinition(hasParams);
     let res = utils_1.indent(`${actionClassNameBase} = createEffect(() => this.storeActions.pipe(\n`);
     res += utils_1.indent(`ofType(actions.start),\n`, 2);
-    const actionParam = hasParams ? 'action' : '';
+    const actionParam = hasParams ? 'action' : '()';
     res += utils_1.indent(`switchMap(${actionParam} => ` +
         `this.${name.toLowerCase()}Service.${simpleName}WithResponse(${startActionPayloadDefinition})\n`, 2);
     res += utils_1.indent(`.pipe(\n`, 3);

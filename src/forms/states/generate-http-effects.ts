@@ -52,7 +52,7 @@ function getEffectDefinition(actionClassNameBase: string, name: string, simpleNa
 
   let res = indent(`${actionClassNameBase} = createEffect(() => this.storeActions.pipe(\n`);
   res += indent(`ofType(actions.start),\n`, 2);
-  const actionParam = hasParams ? 'action' : '';
+  const actionParam = hasParams ? 'action' : '()';
   res += indent(
     `switchMap(${actionParam} => ` +
     `this.${name.toLowerCase()}Service.${simpleName}WithResponse(${startActionPayloadDefinition})\n`, 2);

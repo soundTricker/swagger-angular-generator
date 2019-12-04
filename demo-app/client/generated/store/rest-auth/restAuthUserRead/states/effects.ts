@@ -19,7 +19,7 @@ import * as actions from './actions';
 export class RestAuthUserReadEffects {
   RestAuthUserRead = createEffect(() => this.storeActions.pipe(
     ofType(actions.start),
-    switchMap( => this.restauthService.restAuthUserReadWithResponse()
+    switchMap(() => this.restauthService.restAuthUserReadWithResponse()
       .pipe(
         map(result => actions.success(result)),
         catchError((error: HttpErrorResponse) => of(actions.error(error))),

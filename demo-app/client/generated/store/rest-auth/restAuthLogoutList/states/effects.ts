@@ -19,7 +19,7 @@ import * as actions from './actions';
 export class RestAuthLogoutListEffects {
   RestAuthLogoutList = createEffect(() => this.storeActions.pipe(
     ofType(actions.start),
-    switchMap( => this.restauthService.restAuthLogoutListWithResponse()
+    switchMap(() => this.restauthService.restAuthLogoutListWithResponse()
       .pipe(
         map(result => actions.success(result)),
         catchError((error: HttpErrorResponse) => of(actions.error(error))),
