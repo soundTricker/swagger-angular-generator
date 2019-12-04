@@ -41,6 +41,6 @@ const reducer = createReducer(
 
 export function DeleteORDERReducer(
   state: DeleteORDERState | undefined,
-  action: Action) {
+  action: actions.DeleteORDERAction) {
     return reducer(state, action);
 }

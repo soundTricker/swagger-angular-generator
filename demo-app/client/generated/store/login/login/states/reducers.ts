@@ -41,6 +41,6 @@ const reducer = createReducer(
 
 export function LoginReducer(
   state: LoginState | undefined,
-  action: Action) {
+  action: actions.LoginAction) {
     return reducer(state, action);
 }

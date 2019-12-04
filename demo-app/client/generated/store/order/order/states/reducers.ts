@@ -41,6 +41,6 @@ const reducer = createReducer(
 
 export function OrderReducer(
   state: OrderState | undefined,
-  action: Action) {
+  action: actions.OrderAction) {
     return reducer(state, action);
 }

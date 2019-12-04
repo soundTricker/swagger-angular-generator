@@ -42,6 +42,6 @@ const reducer = createReducer(
 
 export function ArrayReducer(
   state: ArrayState | undefined,
-  action: Action) {
+  action: actions.ArrayAction) {
     return reducer(state, action);
 }

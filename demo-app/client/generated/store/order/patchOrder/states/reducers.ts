@@ -41,6 +41,6 @@ const reducer = createReducer(
 
 export function PatchOrderReducer(
   state: PatchOrderState | undefined,
-  action: Action) {
+  action: actions.PatchOrderAction) {
     return reducer(state, action);
 }

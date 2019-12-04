@@ -38,7 +38,7 @@ function createForms(config, name, processedMethods, definitions) {
             const statesDirName = path.join(formSubDirName, conf.stateDir);
             utils_1.createDir(statesDirName);
             // actions.ts
-            generate_http_actions_1.generateHttpActions(config, name, responseDef, simpleName, formSubDirName, formParams);
+            generate_http_actions_1.generateHttpActions(config, name, responseDef, actionClassNameBase, simpleName, formSubDirName, formParams);
             // reducers.ts
             generate_http_reducers_1.generateHttpReducers(config, name, actionClassNameBase, formSubDirName, responseDef.type);
             // effects.ts

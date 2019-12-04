@@ -6,7 +6,7 @@
  */
 
 import {HttpErrorResponse, HttpResponse} from '@angular/common/http';
-import {createAction, props} from '@ngrx/store';
+import {createAction, props, union} from '@ngrx/store';
 import {ShowTicketDetailParams} from '../../../../controllers/Ticketing';
 import * as __model from '../../../../model';
 
@@ -18,16 +18,18 @@ export enum Actions {
 
 export const start = createAction(
   Actions.START,
-  props<ShowTicketDetailParams>(),
+  props<{payload: ShowTicketDetailParams>(),
 );
 
 export const success = createAction(
   Actions.SUCCESS,
-  props<HttpResponse<__model.TicketDetailOutput[]>>(),
+  props<{payload: HttpResponse<__model.TicketDetailOutput[]>}>(),
 );
 
 export const error = createAction(
   Actions.ERROR,
-  props<HttpErrorResponse>(),
+  props<{payload: HttpErrorResponse}>(),
 );
 
+const actions = union({start, success, error});
+export type ShowTicketDetailAction = typeof actions;

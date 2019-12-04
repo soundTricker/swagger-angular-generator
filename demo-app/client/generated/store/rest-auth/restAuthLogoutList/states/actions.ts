@@ -6,7 +6,7 @@
  */
 
 import {HttpErrorResponse, HttpResponse} from '@angular/common/http';
-import {createAction, props} from '@ngrx/store';
+import {createAction, props, union} from '@ngrx/store';
 
 export enum Actions {
   START = '[RestAuth restAuthLogoutList] Start',
@@ -19,11 +19,13 @@ export const start = createAction(
 
 export const success = createAction(
   Actions.SUCCESS,
-  props<HttpResponse<void>>(),
+  props<{payload: HttpResponse<void>}>(),
 );
 
 export const error = createAction(
   Actions.ERROR,
-  props<HttpErrorResponse>(),
+  props<{payload: HttpErrorResponse}>(),
 );
 
+const actions = union({start, success, error});
+export type RestAuthLogoutListAction = typeof actions;

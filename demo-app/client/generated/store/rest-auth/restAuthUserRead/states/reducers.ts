@@ -42,6 +42,6 @@ const reducer = createReducer(
 
 export function RestAuthUserReadReducer(
   state: RestAuthUserReadState | undefined,
-  action: Action) {
+  action: actions.RestAuthUserReadAction) {
     return reducer(state, action);
 }

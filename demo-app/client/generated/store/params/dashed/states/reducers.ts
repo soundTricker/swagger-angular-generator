@@ -41,6 +41,6 @@ const reducer = createReducer(
 
 export function DashedReducer(
   state: DashedState | undefined,
-  action: Action) {
+  action: actions.DashedAction) {
     return reducer(state, action);
 }

@@ -41,6 +41,6 @@ const reducer = createReducer(
 
 export function RegistrationReducer(
   state: RegistrationState | undefined,
-  action: Action) {
+  action: actions.RegistrationAction) {
     return reducer(state, action);
 }

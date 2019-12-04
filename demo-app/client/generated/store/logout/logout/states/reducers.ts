@@ -41,6 +41,6 @@ const reducer = createReducer(
 
 export function LogoutReducer(
   state: LogoutState | undefined,
-  action: Action) {
+  action: actions.LogoutAction) {
     return reducer(state, action);
 }

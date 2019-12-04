@@ -41,6 +41,6 @@ const reducer = createReducer(
 
 export function PutOrderReducer(
   state: PutOrderState | undefined,
-  action: Action) {
+  action: actions.PutOrderAction) {
     return reducer(state, action);
 }

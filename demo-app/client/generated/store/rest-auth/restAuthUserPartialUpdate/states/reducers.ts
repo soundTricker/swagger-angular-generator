@@ -42,6 +42,6 @@ const reducer = createReducer(
 
 export function RestAuthUserPartialUpdateReducer(
   state: RestAuthUserPartialUpdateState | undefined,
-  action: Action) {
+  action: actions.RestAuthUserPartialUpdateAction) {
     return reducer(state, action);
 }

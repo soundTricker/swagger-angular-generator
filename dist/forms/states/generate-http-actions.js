@@ -4,7 +4,7 @@ const _ = require("lodash");
 const path = require("path");
 const conf_1 = require("../../conf");
 const utils_1 = require("../../utils");
-function generateHttpActions(config, name, responseDef, simpleName, formSubDirName, paramGroups) {
+function generateHttpActions(config, name, responseDef, actionClassNameBase, simpleName, formSubDirName, paramGroups) {
     let content = '';
     const hasParams = paramGroups.length >= 1;
     content += getActionImports(name, simpleName, hasParams, responseDef.type.startsWith('__model.'));
@@ -12,13 +12,14 @@ function generateHttpActions(config, name, responseDef, simpleName, formSubDirNa
     content += getActionStartDefinition(simpleName, hasParams);
     content += getActionSuccessDefinition(responseDef);
     content += getActionErrorDefinition();
+    content += getActionOverviewType(actionClassNameBase);
     const actionsFileName = path.join(formSubDirName, conf_1.stateDir, `actions.ts`);
     utils_1.writeFile(actionsFileName, content, config.header, 'ts', ['max-line-length', 'max-classes-per-file']);
 }
 exports.generateHttpActions = generateHttpActions;
 function getActionImports(name, simpleName, hasParams, importModels) {
     let res = `import {HttpErrorResponse, HttpResponse} from '@angular/common/http';\n`;
-    res += `import {createAction, props} from '@ngrx/store';\n`;
+    res += `import {createAction, props, union} from '@ngrx/store';\n`;
     if (hasParams) {
         res += `import {${_.upperFirst(simpleName)}Params} from '../../../../controllers/${name}';\n`;
     }
@@ -43,7 +44,7 @@ function getActionStartDefinition(name, hasParams) {
     if (hasParams) {
         res += ',\n';
         const params = `${_.upperFirst(name)}Params`;
-        res += utils_1.indent(`props<${params}>(),\n`);
+        res += utils_1.indent(`props<{payload: ${params}>(),\n`);
     }
     res += `);\n`;
     res += `\n`;
@@ -52,7 +53,7 @@ function getActionStartDefinition(name, hasParams) {
 function getActionSuccessDefinition(response) {
     let res = `export const success = createAction(\n`;
     res += utils_1.indent(`Actions.SUCCESS,\n`);
-    res += utils_1.indent(`props<HttpResponse<${response.type}>>(),\n`);
+    res += utils_1.indent(`props<{payload: HttpResponse<${response.type}>}>(),\n`);
     res += `);\n`;
     res += `\n`;
     return res;
@@ -60,7 +61,7 @@ function getActionSuccessDefinition(response) {
 function getActionErrorDefinition() {
     let res = `export const error = createAction(\n`;
     res += utils_1.indent(`Actions.ERROR,\n`);
-    res += utils_1.indent(`props<HttpErrorResponse>(),\n`);
+    res += utils_1.indent(`props<{payload: HttpErrorResponse}>(),\n`);
     res += `);\n`;
     res += `\n`;
     return res;
@@ -73,4 +74,9 @@ function getClassName(name) {
     return _.upperFirst(name);
 }
 exports.getClassName = getClassName;
+function getActionOverviewType(actionClassNameBase) {
+    let res = `const actions = union({start, success, error});\n`;
+    res += `export type ${actionClassNameBase}Action = typeof actions;\n`;
+    return res;
+}
 //# sourceMappingURL=generate-http-actions.js.map

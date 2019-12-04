@@ -42,6 +42,6 @@ const reducer = createReducer(
 
 export function GetGoodsListReducer(
   state: GetGoodsListState | undefined,
-  action: Action) {
+  action: actions.GetGoodsListAction) {
     return reducer(state, action);
 }

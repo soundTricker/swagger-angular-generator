@@ -42,6 +42,6 @@ const reducer = createReducer(
 
 export function ShowTicketDetailReducer(
   state: ShowTicketDetailState | undefined,
-  action: Action) {
+  action: actions.ShowTicketDetailAction) {
     return reducer(state, action);
 }

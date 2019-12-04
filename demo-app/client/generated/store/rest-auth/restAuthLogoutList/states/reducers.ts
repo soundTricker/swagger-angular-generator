@@ -41,6 +41,6 @@ const reducer = createReducer(
 
 export function RestAuthLogoutListReducer(
   state: RestAuthLogoutListState | undefined,
-  action: Action) {
+  action: actions.RestAuthLogoutListAction) {
     return reducer(state, action);
 }

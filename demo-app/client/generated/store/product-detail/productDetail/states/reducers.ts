@@ -42,6 +42,6 @@ const reducer = createReducer(
 
 export function ProductDetailReducer(
   state: ProductDetailState | undefined,
-  action: Action) {
+  action: actions.ProductDetailAction) {
     return reducer(state, action);
 }

@@ -42,6 +42,6 @@ const reducer = createReducer(
 
 export function RestAuthUserUpdateReducer(
   state: RestAuthUserUpdateState | undefined,
-  action: Action) {
+  action: actions.RestAuthUserUpdateAction) {
     return reducer(state, action);
 }

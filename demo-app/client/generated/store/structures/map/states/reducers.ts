@@ -41,6 +41,6 @@ const reducer = createReducer(
 
 export function MapReducer(
   state: MapState | undefined,
-  action: Action) {
+  action: actions.MapAction) {
     return reducer(state, action);
 }

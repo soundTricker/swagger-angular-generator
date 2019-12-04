@@ -72,7 +72,7 @@ function getCreateReducerDefinition(actionClassNameBase: string) {
 function getReducerDefinition(actionClassNameBase: string) {
   let res = `export function ${actionClassNameBase}Reducer(\n`;
   res += indent(`state: ${actionClassNameBase}State | undefined,\n`);
-  res += indent(`action: Action) {\n`);
+  res += indent(`action: actions.${actionClassNameBase}Action) {\n`);
   res += indent(`return reducer(state, action);\n`, 2);
   res += `}\n`;
 

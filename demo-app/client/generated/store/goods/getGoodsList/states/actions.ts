@@ -6,7 +6,7 @@
  */
 
 import {HttpErrorResponse, HttpResponse} from '@angular/common/http';
-import {createAction, props} from '@ngrx/store';
+import {createAction, props, union} from '@ngrx/store';
 import {GetGoodsListParams} from '../../../../controllers/Goods';
 import * as __model from '../../../../model';
 
@@ -18,16 +18,18 @@ export enum Actions {
 
 export const start = createAction(
   Actions.START,
-  props<GetGoodsListParams>(),
+  props<{payload: GetGoodsListParams>(),
 );
 
 export const success = createAction(
   Actions.SUCCESS,
-  props<HttpResponse<__model.GetGoodsListGeneratedInlineModel>>(),
+  props<{payload: HttpResponse<__model.GetGoodsListGeneratedInlineModel>}>(),
 );
 
 export const error = createAction(
   Actions.ERROR,
-  props<HttpErrorResponse>(),
+  props<{payload: HttpErrorResponse}>(),
 );
 
+const actions = union({start, success, error});
+export type GetGoodsListAction = typeof actions;

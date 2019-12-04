@@ -41,6 +41,6 @@ const reducer = createReducer(
 
 export function PositionsReducer(
   state: PositionsState | undefined,
-  action: Action) {
+  action: actions.PositionsAction) {
     return reducer(state, action);
 }

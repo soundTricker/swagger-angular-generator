@@ -6,7 +6,7 @@
  */
 
 import {HttpErrorResponse, HttpResponse} from '@angular/common/http';
-import {createAction, props} from '@ngrx/store';
+import {createAction, props, union} from '@ngrx/store';
 import {RegistrationParams} from '../../../../controllers/Registration';
 
 export enum Actions {
@@ -17,16 +17,18 @@ export enum Actions {
 
 export const start = createAction(
   Actions.START,
-  props<RegistrationParams>(),
+  props<{payload: RegistrationParams>(),
 );
 
 export const success = createAction(
   Actions.SUCCESS,
-  props<HttpResponse<object>>(),
+  props<{payload: HttpResponse<object>}>(),
 );
 
 export const error = createAction(
   Actions.ERROR,
-  props<HttpErrorResponse>(),
+  props<{payload: HttpErrorResponse}>(),
 );
 
+const actions = union({start, success, error});
+export type RegistrationAction = typeof actions;

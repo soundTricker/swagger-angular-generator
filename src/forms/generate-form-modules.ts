@@ -49,7 +49,7 @@ export function createForms(config: Config, name: string, processedMethods: Meth
       createDir(statesDirName);
 
       // actions.ts
-      generateHttpActions(config, name, responseDef, simpleName, formSubDirName, formParams);
+      generateHttpActions(config, name, responseDef, actionClassNameBase, simpleName, formSubDirName, formParams);
       // reducers.ts
       generateHttpReducers(config, name, actionClassNameBase, formSubDirName, responseDef.type);
       // effects.ts
