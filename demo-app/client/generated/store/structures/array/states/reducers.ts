@@ -38,7 +38,8 @@ const reducer = createReducer(
     loading: false,
   })),
   on(actions.error, (state, payload) => ({...state, error: payload, loading: false})),
-  );
+);
+
 export function ArrayReducer(
   state: ArrayState | undefined,
   action: Action) {

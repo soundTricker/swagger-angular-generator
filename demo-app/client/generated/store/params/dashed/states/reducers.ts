@@ -37,7 +37,8 @@ const reducer = createReducer(
     loading: false,
   })),
   on(actions.error, (state, payload) => ({...state, error: payload, loading: false})),
-  );
+);
+
 export function DashedReducer(
   state: DashedState | undefined,
   action: Action) {

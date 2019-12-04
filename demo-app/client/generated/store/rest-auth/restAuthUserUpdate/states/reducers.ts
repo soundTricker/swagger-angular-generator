@@ -38,7 +38,8 @@ const reducer = createReducer(
     loading: false,
   })),
   on(actions.error, (state, payload) => ({...state, error: payload, loading: false})),
-  );
+);
+
 export function RestAuthUserUpdateReducer(
   state: RestAuthUserUpdateState | undefined,
   action: Action) {
