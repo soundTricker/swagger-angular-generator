@@ -19,7 +19,7 @@ import * as actions from './actions';
 export class PutOrderEffects {
   PutOrder = createEffect(() => this.storeActions.pipe(
     ofType(actions.start),
-    switchMap(action => this.orderService.putOrderWithResponse(action)
+    switchMap(action => this.orderService.putOrderWithResponse(action.payload)
       .pipe(
         map(result => actions.success(result)),
         catchError((error: HttpErrorResponse) => of(actions.error(error))),

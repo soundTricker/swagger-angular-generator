@@ -19,7 +19,7 @@ import * as actions from './actions';
 export class DeleteORDEREffects {
   DeleteORDER = createEffect(() => this.storeActions.pipe(
     ofType(actions.start),
-    switchMap(action => this.orderService.deleteORDERWithResponse(action)
+    switchMap(action => this.orderService.deleteORDERWithResponse(action.payload)
       .pipe(
         map(result => actions.success(result)),
         catchError((error: HttpErrorResponse) => of(actions.error(error))),

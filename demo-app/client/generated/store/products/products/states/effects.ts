@@ -19,7 +19,7 @@ import * as actions from './actions';
 export class ProductsEffects {
   Products = createEffect(() => this.storeActions.pipe(
     ofType(actions.start),
-    switchMap(action => this.productsService.productsWithResponse(action)
+    switchMap(action => this.productsService.productsWithResponse(action.payload)
       .pipe(
         map(result => actions.success(result)),
         catchError((error: HttpErrorResponse) => of(actions.error(error))),

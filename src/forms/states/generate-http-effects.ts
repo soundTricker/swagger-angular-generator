@@ -68,6 +68,6 @@ function getEffectDefinition(actionClassNameBase: string, name: string, simpleNa
 }
 
 function getStartActionPayloadDefinition(hasParams: boolean) {
-  if (hasParams) return 'action';
+  if (hasParams) return 'action.payload';
   return '';
 }

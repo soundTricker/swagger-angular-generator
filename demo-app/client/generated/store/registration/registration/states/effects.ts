@@ -19,7 +19,7 @@ import * as actions from './actions';
 export class RegistrationEffects {
   Registration = createEffect(() => this.storeActions.pipe(
     ofType(actions.start),
-    switchMap(action => this.registrationService.registrationWithResponse(action)
+    switchMap(action => this.registrationService.registrationWithResponse(action.payload)
       .pipe(
         map(result => actions.success(result)),
         catchError((error: HttpErrorResponse) => of(actions.error(error))),

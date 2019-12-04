@@ -19,7 +19,7 @@ import * as actions from './actions';
 export class LoginEffects {
   Login = createEffect(() => this.storeActions.pipe(
     ofType(actions.start),
-    switchMap(action => this.loginService.loginWithResponse(action)
+    switchMap(action => this.loginService.loginWithResponse(action.payload)
       .pipe(
         map(result => actions.success(result)),
         catchError((error: HttpErrorResponse) => of(actions.error(error))),

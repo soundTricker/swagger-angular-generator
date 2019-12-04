@@ -51,10 +51,10 @@ function getCreateReducerDefinition(actionClassNameBase) {
     let res = `const reducer = createReducer(\n`;
     res += utils_1.indent(`initial${actionClassNameBase}State,\n`);
     res += utils_1.indent(`on(actions.start, state => ({...state, loading: true, error: null})),\n`);
-    res += utils_1.indent(`on(actions.success, (state, payload) => ({\n`);
+    res += utils_1.indent(`on(actions.success, (state, {payload}) => ({\n`);
     res += utils_1.indent('...state,\ndata: payload.body,\nres: payload,\nloading: false,\n', 2);
     res += utils_1.indent(`})),\n`);
-    res += utils_1.indent(`on(actions.error, (state, payload) => ({...state, error: payload, loading: false})),\n`);
+    res += utils_1.indent(`on(actions.error, (state, {payload}) => ({...state, error: payload, loading: false})),\n`);
     res += `);\n\n`;
     return res;
 }

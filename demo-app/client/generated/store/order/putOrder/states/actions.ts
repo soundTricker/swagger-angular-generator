@@ -6,7 +6,7 @@
  */
 
 import {HttpErrorResponse, HttpResponse} from '@angular/common/http';
-import {createAction, props, union} from '@ngrx/store';
+import {createAction, union} from '@ngrx/store';
 import {PutOrderParams} from '../../../../controllers/Order';
 
 export enum Actions {
@@ -17,18 +17,24 @@ export enum Actions {
 
 export const start = createAction(
   Actions.START,
-  props<{payload: PutOrderParams>(),
+  (payload: PutOrderParams) => ({payload}),
 );
+// Backwards Capability Alias
+export const Start = start;
 
 export const success = createAction(
   Actions.SUCCESS,
-  props<{payload: HttpResponse<object>}>(),
+  (payload: HttpResponse<object>) => ({payload}),
 );
+// Backwards Capability Alias
+export const Success = success;
 
 export const error = createAction(
   Actions.ERROR,
-  props<{payload: HttpErrorResponse}>(),
+  (payload: HttpErrorResponse) => ({payload}),
 );
+// Backwards Capability Alias
+export const Error = error;
 
 const actions = union({start, success, error});
 export type PutOrderAction = typeof actions;

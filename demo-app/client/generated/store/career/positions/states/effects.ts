@@ -19,7 +19,7 @@ import * as actions from './actions';
 export class PositionsEffects {
   Positions = createEffect(() => this.storeActions.pipe(
     ofType(actions.start),
-    switchMap(action => this.careerService.positionsWithResponse(action)
+    switchMap(action => this.careerService.positionsWithResponse(action.payload)
       .pipe(
         map(result => actions.success(result)),
         catchError((error: HttpErrorResponse) => of(actions.error(error))),

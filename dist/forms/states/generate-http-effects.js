@@ -56,7 +56,7 @@ function getEffectDefinition(actionClassNameBase, name, simpleName, hasParams) {
 }
 function getStartActionPayloadDefinition(hasParams) {
     if (hasParams)
-        return 'action';
+        return 'action.payload';
     return '';
 }
 //# sourceMappingURL=generate-http-effects.js.map

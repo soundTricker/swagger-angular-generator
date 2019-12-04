@@ -26,7 +26,7 @@ export function generateHttpActions(config: Config, name: string, responseDef: R
 function getActionImports(name: string, simpleName: string, hasParams: boolean,
                           importModels: boolean) {
   let res = `import {HttpErrorResponse, HttpResponse} from '@angular/common/http';\n`;
-  res += `import {createAction, props, union} from '@ngrx/store';\n`;
+  res += `import {createAction, union} from '@ngrx/store';\n`;
 
   if (hasParams) {
     res += `import {${_.upperFirst(simpleName)}Params} from '../../../../controllers/${name}';\n`;
@@ -54,11 +54,11 @@ function getActionStartDefinition(name: string, hasParams: boolean) {
   if (hasParams) {
     res += ',\n';
     const params = `${ _.upperFirst(name) }Params`;
-    res += indent(`props<{payload: ${params}>(),\n`);
+    res += indent(`(payload: ${params}) => ({payload}),\n`);
   }
   res += `);\n`;
-  res += `\n`;
-
+  res += `// Backwards Capability Alias\n`;
+  res += `export const Start = start;\n\n`;
   return res;
 }
 
@@ -67,9 +67,10 @@ function getActionSuccessDefinition(response: ResponseDef) {
   let res = `export const success = createAction(\n`;
 
   res += indent(`Actions.SUCCESS,\n`);
-  res += indent(`props<{payload: HttpResponse<${response.type}>}>(),\n`);
+  res += indent(`(payload: HttpResponse<${response.type}>) => ({payload}),\n`);
   res += `);\n`;
-  res += `\n`;
+  res += `// Backwards Capability Alias\n`;
+  res += `export const Success = success;\n\n`;
   return res;
 }
 
@@ -78,9 +79,10 @@ function getActionErrorDefinition() {
   let res = `export const error = createAction(\n`;
 
   res += indent(`Actions.ERROR,\n`);
-  res += indent(`props<{payload: HttpErrorResponse}>(),\n`);
+  res += indent(`(payload: HttpErrorResponse) => ({payload}),\n`);
   res += `);\n`;
-  res += `\n`;
+  res += `// Backwards Capability Alias\n`;
+  res += `export const Error = error;\n\n`;
   return res;
 }
 

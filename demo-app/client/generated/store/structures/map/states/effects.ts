@@ -19,7 +19,7 @@ import * as actions from './actions';
 export class MapEffects {
   Map = createEffect(() => this.storeActions.pipe(
     ofType(actions.start),
-    switchMap(action => this.structuresService.mapWithResponse(action)
+    switchMap(action => this.structuresService.mapWithResponse(action.payload)
       .pipe(
         map(result => actions.success(result)),
         catchError((error: HttpErrorResponse) => of(actions.error(error))),

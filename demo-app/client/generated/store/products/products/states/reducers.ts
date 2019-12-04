@@ -31,13 +31,13 @@ export const getProductsStateSelector = createFeatureSelector<ProductsState>(sel
 const reducer = createReducer(
   initialProductsState,
   on(actions.start, state => ({...state, loading: true, error: null})),
-  on(actions.success, (state, payload) => ({
+  on(actions.success, (state, {payload}) => ({
     ...state,
     data: payload.body,
     res: payload,
     loading: false,
   })),
-  on(actions.error, (state, payload) => ({...state, error: payload, loading: false})),
+  on(actions.error, (state, {payload}) => ({...state, error: payload, loading: false})),
 );
 
 export function ProductsReducer(
