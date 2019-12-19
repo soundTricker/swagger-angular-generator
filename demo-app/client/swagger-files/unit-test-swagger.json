@@ -1237,7 +1237,7 @@
     "EnumStringAlias": {
       "type": "string",
       "description": "EnumStringAlias",
-      "enum": ["A", "B"]
+      "enum": ["A", "B", "C:a", "hoge fuga", "hoge.fuga/hoge"]
     },
     "EnumIntAlias": {
       "type": "integer",

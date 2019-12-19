@@ -91,7 +91,7 @@ function processDefinition(def, name, config) {
         if (isStringArray(def.enum)) {
             output += `export type ${name} = ${def.enum.map(e => `'${e}'`).join(' | ')};\n\n`;
             output += `export const ${name} = {\n`;
-            output += def.enum.map(e => utils_1.indent(`${e.charAt(0).toUpperCase() + e.slice(1)}: '${e}' as ${name},`)).join('\n');
+            output += def.enum.map(e => utils_1.indent(`${common_1.normalizeDef(e.replace(/[:\/]/, '.'))}: '${e}' as ${name},`)).join('\n');
             output += `\n};\n`;
         }
         else {
