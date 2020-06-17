@@ -5,9 +5,10 @@
  * example.com/api-base-path
  */
 
-import {Action, createReducer, on, createFeatureSelector} from '@ngrx/store';
-
 import {HttpErrorResponse, HttpResponse} from '@angular/common/http';
+import {Action, createReducer, createFeatureSelector, on} from '@ngrx/store';
+
+import {convertHttpHeader} from '../../../../common/utils';
 import * as actions from './actions';
 
 export interface MapState {
@@ -15,6 +16,7 @@ export interface MapState {
   loading: boolean;
   error: HttpErrorResponse | null;
   res: HttpResponse<void> | null;
+  headers: Record<string, string[]> | null;
 }
 
 export const initialMapState: MapState = {
@@ -22,6 +24,7 @@ export const initialMapState: MapState = {
   loading: false,
   error: null,
   res: null,
+  headers: null,
 };
 
 export const selectorName = 'Structures_Map';
@@ -34,6 +37,7 @@ const reducer = createReducer(
     ...state,
     data: payload.body,
     res: payload,
+    headers: convertHttpHeader(payload.headers),
     loading: false,
   })),
   on(actions.error, (state, {payload}) => ({...state, error: payload, loading: false})),

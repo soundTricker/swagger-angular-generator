@@ -66,7 +66,7 @@ function processMethod(method, unwrapSingleParamMethods) {
         method.swaggerUrl,
         'return httpResponse'
     ].filter(Boolean));
-    methodDef += `${method.simpleName}WithResponse(${paramsSignature}):` +
+    methodDef += `${method.simpleName}WithResponse(${paramsSignature}): ` +
         `Observable<HttpResponse<${method.responseDef.type}>> {\n`;
     // apply the param definitions, e.g. bodyParams
     methodDef += utils_1.indent(paramSeparation);

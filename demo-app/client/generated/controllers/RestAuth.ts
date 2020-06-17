@@ -42,7 +42,7 @@ export class RestAuthService {
    * http://example.com/swagger/swagger-ui.html#!/rest-auth/rest-auth_logout_list
    * return httpResponse
    */
-  restAuthLogoutListWithResponse():Observable<HttpResponse<void>> {
+  restAuthLogoutListWithResponse(): Observable<HttpResponse<void>> {
     return this.http.get<void>(`/api-base-path/rest-auth/logout/`, {observe: 'response'});
   }
 
@@ -65,7 +65,7 @@ export class RestAuthService {
    * http://example.com/swagger/swagger-ui.html#!/rest-auth/rest-auth_logout_create
    * return httpResponse
    */
-  restAuthLogoutCreateWithResponse():Observable<HttpResponse<void>> {
+  restAuthLogoutCreateWithResponse(): Observable<HttpResponse<void>> {
     return this.http.post<void>(`/api-base-path/rest-auth/logout/`, {}, {observe: 'response'});
   }
 
@@ -96,7 +96,7 @@ export class RestAuthService {
    * http://example.com/swagger/swagger-ui.html#!/rest-auth/rest-auth_user_read
    * return httpResponse
    */
-  restAuthUserReadWithResponse():Observable<HttpResponse<__model.UserDetails>> {
+  restAuthUserReadWithResponse(): Observable<HttpResponse<__model.UserDetails>> {
     return this.http.get<__model.UserDetails>(`/api-base-path/rest-auth/user/`, {observe: 'response'});
   }
 
@@ -129,7 +129,7 @@ export class RestAuthService {
    * http://example.com/swagger/swagger-ui.html#!/rest-auth/rest-auth_user_update
    * return httpResponse
    */
-  restAuthUserUpdateWithResponse(params: RestAuthUserUpdateParams):Observable<HttpResponse<__model.UserDetails>> {
+  restAuthUserUpdateWithResponse(params: RestAuthUserUpdateParams): Observable<HttpResponse<__model.UserDetails>> {
     const bodyParams = params.data;
 
     return this.http.put<__model.UserDetails>(`/api-base-path/rest-auth/user/`, bodyParams || {}, {observe: 'response'});
@@ -167,7 +167,7 @@ export class RestAuthService {
    * http://example.com/swagger/swagger-ui.html#!/rest-auth/rest-auth_user_partial_update
    * return httpResponse
    */
-  restAuthUserPartialUpdateWithResponse(params: RestAuthUserPartialUpdateParams):Observable<HttpResponse<__model.UserDetails>> {
+  restAuthUserPartialUpdateWithResponse(params: RestAuthUserPartialUpdateParams): Observable<HttpResponse<__model.UserDetails>> {
     const bodyParams = params.data;
 
     return this.http.patch<__model.UserDetails>(`/api-base-path/rest-auth/user/`, bodyParams || {}, {observe: 'response'});

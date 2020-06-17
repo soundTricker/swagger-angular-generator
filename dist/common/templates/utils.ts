@@ -1,3 +1,4 @@
+import {HttpHeaders} from '@angular/common/http';
 import {AbstractControl, FormArray, FormControl, FormGroup} from '@angular/forms';
 
 import {FormArrayExtended} from './formArrayExtended';
@@ -49,4 +50,14 @@ function getValue(input: any, attribute: string | number) {
   return nullOrUndef(input) || typeof input !== 'object' ?
     undefined :
     input[attribute];
+}
+
+export function convertHttpHeader(header?: HttpHeaders): Record<string, string[]> {
+  if (!header || !header.keys) {
+    return {};
+  }
+  return header.keys().reduce<Record<string, string[]>>((map, key) => {
+    map[key] = header.getAll(key) || [];
+    return map;
+  }, {});
 }

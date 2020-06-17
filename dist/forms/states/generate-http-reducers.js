@@ -16,8 +16,9 @@ function generateHttpReducers(config, name, actionClassNameBase, formSubDirName,
 }
 exports.generateHttpReducers = generateHttpReducers;
 function getReducerImports(usesModels) {
-    let res = `import {Action, createReducer, on, createFeatureSelector} from '@ngrx/store';\n\n`;
-    res += `import {HttpErrorResponse, HttpResponse} from '@angular/common/http';\n`;
+    let res = `import {HttpErrorResponse, HttpResponse} from '@angular/common/http';\n`;
+    res += `import {Action, createReducer, createFeatureSelector, on} from '@ngrx/store';\n\n`;
+    res += `import {convertHttpHeader} from '../../../../common/utils';\n`;
     if (usesModels)
         res += `import * as __model from '../../../../model';\n`;
     res += `import * as actions from './actions';\n\n`;
@@ -29,6 +30,7 @@ function getStateInteface(actionClassNameBase, type) {
     res += utils_1.indent(`loading: boolean;\n`);
     res += utils_1.indent(`error: HttpErrorResponse | null;\n`);
     res += utils_1.indent(`res: HttpResponse<${type}> | null;\n`);
+    res += utils_1.indent(`headers: Record<string, string[]> | null;\n`);
     res += `}\n\n`;
     return res;
 }
@@ -38,6 +40,7 @@ function getInitialState(actionClassNameBase) {
     res += utils_1.indent(`loading: false,\n`);
     res += utils_1.indent(`error: null,\n`);
     res += utils_1.indent(`res: null,\n`);
+    res += utils_1.indent(`headers: null,\n`);
     res += `};\n\n`;
     return res;
 }
@@ -52,7 +55,12 @@ function getCreateReducerDefinition(actionClassNameBase) {
     res += utils_1.indent(`initial${actionClassNameBase}State,\n`);
     res += utils_1.indent(`on(actions.start, state => ({...state, loading: true, error: null})),\n`);
     res += utils_1.indent(`on(actions.success, (state, {payload}) => ({\n`);
-    res += utils_1.indent('...state,\ndata: payload.body,\nres: payload,\nloading: false,\n', 2);
+    res += utils_1.indent(`...state,
+data: payload.body,
+res: payload,
+headers: convertHttpHeader(payload.headers),
+loading: false,
+`, 2);
     res += utils_1.indent(`})),\n`);
     res += utils_1.indent(`on(actions.error, (state, {payload}) => ({...state, error: payload, loading: false})),\n`);
     res += `);\n\n`;
