@@ -83,7 +83,7 @@ export class OrderService {
    * http://example.com/swagger/swagger-ui.html#!/Order/Order
    * return httpResponse
    */
-  orderWithResponse(params: OrderParams):Observable<HttpResponse<object>> {
+  orderWithResponse(params: OrderParams): Observable<HttpResponse<object>> {
     const bodyParams = params.orderDto;
 
     const queryParamBase = {
@@ -123,7 +123,7 @@ export class OrderService {
    * http://example.com/swagger/swagger-ui.html#!/Order/PatchOrder
    * return httpResponse
    */
-  patchOrderWithResponse(params: PatchOrderParams):Observable<HttpResponse<object>> {
+  patchOrderWithResponse(params: PatchOrderParams): Observable<HttpResponse<object>> {
     const pathParams = {
       orderId: params.orderId,
     };
@@ -157,7 +157,7 @@ export class OrderService {
    * http://example.com/swagger/swagger-ui.html#!/Order/Put-Order
    * return httpResponse
    */
-  putOrderWithResponse(params: PutOrderParams):Observable<HttpResponse<object>> {
+  putOrderWithResponse(params: PutOrderParams): Observable<HttpResponse<object>> {
     const pathParams = {
       orderId: params.orderId,
     };
@@ -186,7 +186,7 @@ export class OrderService {
    * http://example.com/swagger/swagger-ui.html#!/Order/deleteORDER
    * return httpResponse
    */
-  deleteORDERWithResponse(params: DeleteORDERParams):Observable<HttpResponse<object>> {
+  deleteORDERWithResponse(params: DeleteORDERParams): Observable<HttpResponse<object>> {
     const pathParams = {
       orderId: params.orderId,
     };

@@ -19,9 +19,11 @@ export function generateHttpReducers(config: Config, name: string, actionClassNa
 }
 
 function getReducerImports(usesModels: boolean) {
-  let res = `import {Action, createReducer, on, createFeatureSelector} from '@ngrx/store';\n\n`;
-  res += `import {HttpErrorResponse, HttpResponse} from '@angular/common/http';\n`;
+  let res = `import {HttpErrorResponse, HttpResponse} from '@angular/common/http';\n`;
+  res += `import {Action, createReducer, createFeatureSelector, on} from '@ngrx/store';\n\n`;
+  res += `import {convertHttpHeader} from '../../../../common/utils';\n`;
   if (usesModels) res += `import * as __model from '../../../../model';\n`;
+
   res += `import * as actions from './actions';\n\n`;
 
   return res;
@@ -33,6 +35,7 @@ function getStateInteface(actionClassNameBase: string, type: string) {
   res += indent(`loading: boolean;\n`);
   res += indent(`error: HttpErrorResponse | null;\n`);
   res += indent(`res: HttpResponse<${type}> | null;\n`);
+  res += indent(`headers: Record<string, string[]> | null;\n`);
   res += `}\n\n`;
 
   return res;
@@ -44,6 +47,7 @@ function getInitialState(actionClassNameBase: string) {
   res += indent(`loading: false,\n`);
   res += indent(`error: null,\n`);
   res += indent(`res: null,\n`);
+  res += indent(`headers: null,\n`);
   res += `};\n\n`;
 
   return res;
@@ -62,7 +66,12 @@ function getCreateReducerDefinition(actionClassNameBase: string) {
   res += indent(`initial${actionClassNameBase}State,\n`);
   res += indent(`on(actions.start, state => ({...state, loading: true, error: null})),\n`);
   res += indent(`on(actions.success, (state, {payload}) => ({\n`);
-  res += indent('...state,\ndata: payload.body,\nres: payload,\nloading: false,\n', 2);
+  res += indent(`...state,
+data: payload.body,
+res: payload,
+headers: convertHttpHeader(payload.headers),
+loading: false,
+`, 2);
   res += indent(`})),\n`);
   res += indent(`on(actions.error, (state, {payload}) => ({...state, error: payload, loading: false})),\n`);
   res += `);\n\n`;

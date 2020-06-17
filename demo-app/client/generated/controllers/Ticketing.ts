@@ -53,7 +53,7 @@ export class TicketingService {
    * http://example.com/swagger/swagger-ui.html#!/ticketing/ticketing_show-ticket-detail_read
    * return httpResponse
    */
-  showTicketDetailWithResponse(params: ShowTicketDetailParams):Observable<HttpResponse<__model.TicketDetailOutput[]>> {
+  showTicketDetailWithResponse(params: ShowTicketDetailParams): Observable<HttpResponse<__model.TicketDetailOutput[]>> {
     const queryParamBase = {
       date_from: params.date_from,
       date_to: params.date_to,
