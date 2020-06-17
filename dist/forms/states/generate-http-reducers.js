@@ -18,7 +18,6 @@ exports.generateHttpReducers = generateHttpReducers;
 function getReducerImports(usesModels) {
     let res = `import {HttpErrorResponse, HttpResponse} from '@angular/common/http';\n`;
     res += `import {Action, createReducer, createFeatureSelector, on} from '@ngrx/store';\n\n`;
-    res += `import {convertHttpHeader} from '../../../../common/utils';\n`;
     if (usesModels)
         res += `import * as __model from '../../../../model';\n`;
     res += `import * as actions from './actions';\n\n`;
@@ -54,11 +53,11 @@ function getCreateReducerDefinition(actionClassNameBase) {
     let res = `const reducer = createReducer(\n`;
     res += utils_1.indent(`initial${actionClassNameBase}State,\n`);
     res += utils_1.indent(`on(actions.start, state => ({...state, loading: true, error: null})),\n`);
-    res += utils_1.indent(`on(actions.success, (state, {payload}) => ({\n`);
+    res += utils_1.indent(`on(actions.success, (state, {payload, headers}) => ({\n`);
     res += utils_1.indent(`...state,
 data: payload.body,
 res: payload,
-headers: convertHttpHeader(payload.headers),
+headers,
 loading: false,
 `, 2);
     res += utils_1.indent(`})),\n`);

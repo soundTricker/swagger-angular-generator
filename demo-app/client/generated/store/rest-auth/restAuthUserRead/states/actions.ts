@@ -7,6 +7,7 @@
 
 import {HttpErrorResponse, HttpResponse} from '@angular/common/http';
 import {createAction, union} from '@ngrx/store';
+import {convertHttpHeader} from '../../../../common/utils';
 import * as __model from '../../../../model';
 
 export enum Actions {
@@ -22,7 +23,8 @@ export const Start = start;
 
 export const success = createAction(
   Actions.SUCCESS,
-  (payload: HttpResponse<__model.UserDetails>) => ({payload}),
+  (payload: HttpResponse<__model.UserDetails>) =>
+    ({payload, headers: convertHttpHeader(payload.headers)}),
 );
 // Backwards Capability Alias
 export const Success = success;

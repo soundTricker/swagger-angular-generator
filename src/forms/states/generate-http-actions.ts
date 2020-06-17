@@ -27,7 +27,7 @@ function getActionImports(name: string, simpleName: string, hasParams: boolean,
                           importModels: boolean) {
   let res = `import {HttpErrorResponse, HttpResponse} from '@angular/common/http';\n`;
   res += `import {createAction, union} from '@ngrx/store';\n`;
-
+  res += `import {convertHttpHeader} from '../../../../common/utils';\n`;
   if (hasParams) {
     res += `import {${_.upperFirst(simpleName)}Params} from '../../../../controllers/${name}';\n`;
   }
@@ -67,7 +67,8 @@ function getActionSuccessDefinition(response: ResponseDef) {
   let res = `export const success = createAction(\n`;
 
   res += indent(`Actions.SUCCESS,\n`);
-  res += indent(`(payload: HttpResponse<${response.type}>) => ({payload}),\n`);
+  res += indent(`(payload: HttpResponse<${response.type}>) =>
+  ({payload, headers: convertHttpHeader(payload.headers)}),\n`);
   res += `);\n`;
   res += `// Backwards Capability Alias\n`;
   res += `export const Success = success;\n\n`;

@@ -7,6 +7,7 @@
 
 import {HttpErrorResponse, HttpResponse} from '@angular/common/http';
 import {createAction, union} from '@ngrx/store';
+import {convertHttpHeader} from '../../../../common/utils';
 import {GetGoodsListParams} from '../../../../controllers/Goods';
 import * as __model from '../../../../model';
 
@@ -25,7 +26,8 @@ export const Start = start;
 
 export const success = createAction(
   Actions.SUCCESS,
-  (payload: HttpResponse<__model.GetGoodsListGeneratedInlineModel>) => ({payload}),
+  (payload: HttpResponse<__model.GetGoodsListGeneratedInlineModel>) =>
+    ({payload, headers: convertHttpHeader(payload.headers)}),
 );
 // Backwards Capability Alias
 export const Success = success;

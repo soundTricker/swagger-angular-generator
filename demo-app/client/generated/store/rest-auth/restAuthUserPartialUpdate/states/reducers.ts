@@ -8,7 +8,6 @@
 import {HttpErrorResponse, HttpResponse} from '@angular/common/http';
 import {Action, createReducer, createFeatureSelector, on} from '@ngrx/store';
 
-import {convertHttpHeader} from '../../../../common/utils';
 import * as __model from '../../../../model';
 import * as actions from './actions';
 
@@ -34,11 +33,11 @@ export const getRestAuthUserPartialUpdateStateSelector = createFeatureSelector<R
 const reducer = createReducer(
   initialRestAuthUserPartialUpdateState,
   on(actions.start, state => ({...state, loading: true, error: null})),
-  on(actions.success, (state, {payload}) => ({
+  on(actions.success, (state, {payload, headers}) => ({
     ...state,
     data: payload.body,
     res: payload,
-    headers: convertHttpHeader(payload.headers),
+    headers,
     loading: false,
   })),
   on(actions.error, (state, {payload}) => ({...state, error: payload, loading: false})),
